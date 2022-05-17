@@ -6,9 +6,11 @@ from IPython.display import display
 # from scipy.optimize import minimize
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import seaborn as sns
+import pandas as pd
 
 
-def plot_data(cls, model, block_type, pid):
+def plot_data(model, block_type, pid):
     actions = model.longform[
         (model.longform["PID"] == pid) & (model.longform["Type"] == block_type)
     ]["Action"].to_numpy()
@@ -110,3 +112,28 @@ def plot_model_comparison(
         fig.update_yaxes(range=y_range)
     fig.show()
 
+def trace_plot(model, pid, figsize=None):
+    if figsize is None:
+        figsize = (15, 2.5*model.n_params)
+    fig, ax = plt.subplots(model.n_params, 2, figsize=figsize)
+    for i, param in enumerate(model.params):
+        if model.n_params > 1:
+            for b, block in enumerate(['money', 'other']):
+                vals = model.traces[pid][block].posterior[param].values.flatten()
+                sns.kdeplot(data=pd.DataFrame({param: vals}), x=param, shade=True, ax=ax[i, 0])
+                sns.lineplot(x=np.arange(len(vals)), y=vals, alpha=0.5, ax=ax[i, 1])
+            ax[i, 0].legend(labels=["Money","Other"], loc='upper right')            
+            ax[i, 1].legend(labels=["Money","Other"], loc='upper right')
+            ax[i, 0].set_title(f"{param} (KDE)")
+            ax[i, 1].set_title(f"{param} (Trace)")
+        else:
+            for b, block in enumerate(['money', 'other']):
+                vals = model.traces[pid][block].posterior[param].values.flatten()
+                sns.kdeplot(data=pd.DataFrame({param: vals}), x=param, shade=True, ax=ax[0])
+                sns.lineplot(x=np.arange(len(vals)), y=vals, alpha=0.5, ax=ax[1])
+            ax[0].legend(labels=["Money","Other"], loc='upper right')            
+            ax[1].legend(labels=["Money","Other"], loc='upper right')
+            ax[0].set_title(f"{param} (KDE)")
+            ax[1].set_title(f"{param} (Trace)")
+    fig.tight_layout()
+    return ax

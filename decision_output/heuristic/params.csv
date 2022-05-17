@@ -1,0 +1,2 @@
+model_description,n_subj,n_trials,n_blocks,n_options,fit_complete
+Heuristic: switch after two losses,10,60,2,2,False
