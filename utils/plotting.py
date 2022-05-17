@@ -66,22 +66,24 @@ def plot_data(model, block_type, pid):
     plt.legend(handles, labels, fontsize=12, loc=(1.01, 0.27))
     plt.tight_layout()
 
-
 def plot_model_comparison(
-    models, metric="BIC", sum=False, width=800, height=500, y_range=None
+    models, metric="bic", sum=False, width=800, height=500, y_range=None
 ):
     fig = go.Figure()
     colors = ["indianred", "lightseagreen", "cornflowerblue", "goldenrod", "darkorange"]
-    n_participants = len(models[0].bics)
+    n_participants = len(models[0].ics)
 
     if sum:
-        x = ["Money", "Other"]
+        x = ["money", "other"]
         for i, model in enumerate(models):
-            ic = np.vstack([model.bics[pid].mean(axis=0) for pid in model.bics.keys()])
+            ic = [
+                np.sum(np.hstack([model.ics[pid]['money'][metric].mean() for pid in model.ics.keys()])),
+                np.sum(np.hstack([model.ics[pid]['other'][metric].mean() for pid in model.ics.keys()]))
+            ]
             fig.add_trace(
                 go.Bar(
                     x=x,
-                    y=ic.sum(axis=0),
+                    y=ic,
                     name=f"{model.model_name}",
                     marker_color=colors[i],
                 )
@@ -91,10 +93,13 @@ def plot_model_comparison(
     else:
         x = ["Money"] * n_participants + ["Other"] * n_participants
         for i, model in enumerate(models):
-            ic = np.vstack([model.bics[pid].mean(axis=0) for pid in model.bics.keys()])
+            ic = np.array([
+                np.hstack([model.ics[pid]['money'][metric].mean() for pid in model.ics.keys()]),
+                np.hstack([model.ics[pid]['other'][metric].mean() for pid in model.ics.keys()])
+            ])
             fig.add_trace(
                 go.Box(
-                    y=np.hstack([ic[:, 0], ic[:, 1]]),
+                    y=np.hstack([ic[0,:], ic[1, :]]),
                     x=x,
                     boxpoints="all",
                     pointpos=0,
