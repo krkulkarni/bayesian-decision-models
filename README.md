@@ -7,7 +7,7 @@
 
 This repository contains materials for modeling choice data recorded while participants played a two-armed bandit task. Three reinforcement learning (RL) models are implemented along with two heuristic models for comparison. RL models are all variations of temporal difference learning models. 
 
-These models were coded by Kaustubh Kulkarni in the spring of 2022 (reach him via <a target="_blank" rel="noopener noreferrer" href="mailto:kaustubh(dot)kulkarni(at)icahn(dot)mssm(dot)edu">email</a>, <a target="_blank" rel="noopener noreferrer" href="https://github.com/kulkarnik">GitHub</a>, or <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/krkulkarni_">Twitter</a> with any questions).
+These models were coded in the spring of 2022 by Kaustubh Kulkarni(reach me via <a target="_blank" rel="noopener noreferrer" href="mailto:kaustubh(dot)kulkarni(at)icahn(dot)mssm(dot)edu">email</a>, <a target="_blank" rel="noopener noreferrer" href="https://github.com/kulkarnik">GitHub</a>, or <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/krkulkarni_">Twitter</a> with any questions).
 
 ## 🧮 Models
 | **Model** |           **Model Description**          |       **Parameters**       |                                                         **Details**                                                        |
